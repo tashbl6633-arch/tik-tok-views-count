@@ -23,30 +23,30 @@ top_country = st.text_input("Top Audience Country", value="Sri Lanka")
 # --- SECTION 3: SCRIPT INPUT ---
 st.header("📝 Video Script & Audio Hook")
 video_script = st.text_area(
-"Paste your exact video transcript or text-on-screen:",
-placeholder="Example: Read this if you feel like giving up today. If you want to change your life..."
+    "Paste your exact video transcript or text-on-screen:",
+    placeholder="Example: Read this if you feel like giving up today. If you want to change your life..."
 )
 
 # --- SECTION 4: AI DIAGNOSTIC ENGINE ---
 if st.button("🚀 Analyze & Generate Strategy"):
-if not api_key:
-st.error("Please add your Gemini API Key in the sidebar to run the analysis.")
-elif not video_script:
-st.error("Please paste your video script so the AI can analyze your hook.")
-else:
-with st.spinner("Analyzing watch-time drop-offs and regional hooks..."):
-try:
-# Configure the AI engine
-genai.configure(api_key=api_key)
-model = genai.GenerativeModel('gemini-2.5-flash')
-
-diagnostic_prompt = f"Analyze this TikTok video stuck in view jail. Views: {views}, Length: {duration}s, 3s Retention: {retention_3s}%, Audience: {top_country}. Script: '{video_script}'. Provide a critical fault analysis, geographical hook adjustments to target global US/UK audiences, and rewrite a highly engaging 3-second hook."
-
-response = model.generate_content(diagnostic_prompt)
-
-st.success("🎯 Optimization Blueprint Ready!")
-st.markdown("---")
-st.markdown(response.text)
-
-except Exception as e:
-st.error(f"An error occurred: {e}")
+    if not api_key:
+        st.error("Please add your Gemini API Key in the sidebar to run the analysis.")
+    elif not video_script:
+        st.error("Please paste your video script so the AI can analyze your hook.")
+    else:
+        with st.spinner("Analyzing watch-time drop-offs and regional hooks..."):
+            try:
+                # Configure the AI engine
+                genai.configure(api_key=api_key)
+                model = genai.GenerativeModel('gemini-2.5-flash')
+                
+                diagnostic_prompt = f"Analyze this TikTok video stuck in view jail. Views: {views}, Length: {duration}s, 3s Retention: {retention_3s}%, Audience: {top_country}. Script: '{video_script}'. Provide a critical fault analysis, geographical hook adjustments to target global US/UK audiences, and rewrite a highly engaging 3-second hook."
+                
+                response = model.generate_content(diagnostic_prompt)
+                
+                st.success("🎯 Optimization Blueprint Ready!")
+                st.markdown("---")
+                st.markdown(response.text)
+                
+            except Exception as e:
+                st.error(f"An error occurred: {e}")
