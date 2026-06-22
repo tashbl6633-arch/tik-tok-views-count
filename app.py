@@ -1,7 +1,7 @@
 import streamlit as st
 import google.generativeai as genai
 
-# Page configuration for a clean mobile & desktop layout
+# Page configuration
 st.set_page_config(page_title="TikTok Motivation Booster", page_icon="📈", layout="centered")
 
 st.title("📈 TikTok Growth & Analytics Dashboard")
@@ -15,11 +15,8 @@ api_key = st.sidebar.text_input("Enter Gemini API Key", type="password")
 # --- SECTION 2: METRICS INPUT ---
 st.header("📊 Video Performance Metrics")
 
-col1, col2 = st.columns(2)
-with col1:
 views = st.number_input("Total Views", min_value=0, value=350, step=10)
 duration = st.number_input("Video Duration (seconds)", min_value=1, value=15)
-with col2:
 retention_3s = st.slider("3-Second Retention Rate (%)", min_value=0, max_value=100, value=35)
 top_country = st.text_input("Top Audience Country", value="Sri Lanka")
 
@@ -43,29 +40,10 @@ try:
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-2.5-flash')
 
-# Expert prompt engineering tailored to short-form content scaling
-diagnostic_prompt = f"""
-You are an elite TikTok Growth Strategist specializing in the Mindset, Motivation, and Inspiration niche.
-Analyze this video which is currently stuck in the 300-500 'view jail' tier.
-
-METRICS TO EVALUATE:
-- Total Views: {views}
-- Video Length: {duration} seconds
-- Retention at 3 Seconds: {retention_3s}%
-- Primary Audience Location: {top_country}
-
-VIDEO SCRIPT:
-"{video_script}"
-
-Provide a highly actionable, brutal, and precise report containing:
-1. CRITICAL FAULT: Why did the video stall? (Look closely if the 3s retention is less than 60%, or if the hook in the script is slow).
-2. GEOGRAPHIC TUNING: The creator's main traffic is from {top_country}. How can they tweak their text/sounds to make this appeal globally (US/UK/Global) to instantly clear 1k-3k views?
-3. THE REWRITE: Provide an exact, high-retention alternative hook (first 3 seconds) for this exact script.
-"""
+diagnostic_prompt = f"Analyze this TikTok video stuck in view jail. Views: {views}, Length: {duration}s, 3s Retention: {retention_3s}%, Audience: {top_country}. Script: '{video_script}'. Provide a critical fault analysis, geographical hook adjustments to target global US/UK audiences, and rewrite a highly engaging 3-second hook."
 
 response = model.generate_content(diagnostic_prompt)
 
-# Output results elegantly onto the dashboard
 st.success("🎯 Optimization Blueprint Ready!")
 st.markdown("---")
 st.markdown(response.text)
